@@ -1,0 +1,5 @@
+admin: gmail: admin@gmail.com
+       password: admin	
+user: 	gmail: user@gmail.com		
+	password: 123
+SQL File: script.sql

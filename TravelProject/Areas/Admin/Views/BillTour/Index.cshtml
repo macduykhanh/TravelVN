@@ -1,0 +1,229 @@
+﻿@using TravelProject.Models;
+@model List<Blog>
+@{
+    TravelContext mdt = new TravelContext();
+    var modelUser = mdt.ThanhViens.ToList();
+    var modelTours = mdt.Tours.ToList();
+    var modelPhieuTour = mdt.PhieuDatTours.ToList();
+    var modelDanhGia = mdt.DanhGias.ToList();
+}
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/Layout_Admin.cshtml";
+}
+<main>
+    <div class="container-fluid px-4">
+        <h1 class="mt-4">Quản Lý Hóa Đơn</h1>
+        <ol class="breadcrumb mb-4">
+        </ol>
+        <div class="row">
+            <div class="col-xl-3 col-md-6">
+                <div class="card bg-primary text-white mb-4">
+                    <div class="card-body text-center">User Đăng Ký</div>
+                    <div class="card-body text-center ">@modelUser.Count()</div>
+                    <div class="card-footer d-flex align-items-center justify-content-between">
+                        <a class="small text-white stretched-link" href="#">View Details</a>
+                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6">
+                <div class="card bg-warning text-white mb-4">
+                    <div class="card-body text-center">Tour Du Lịch </div>
+                    <div class="card-body text-center ">@modelTours.Count()</div>
+                    <div class="card-footer d-flex align-items-center justify-content-between">
+                        <a class="small text-white stretched-link" href="#">View Details</a>
+                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6">
+                <div class="card bg-success text-white mb-4">
+                    <div class="card-body text-center">Tour Đã Đặt</div>
+                    <div class="card-body text-center ">@modelPhieuTour.Count()</div>
+                    <div class="card-footer d-flex align-items-center justify-content-between">
+                        <a class="small text-white stretched-link" href="#">View Details</a>
+                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6">
+                <div class="card bg-danger text-white mb-4">
+                    <div class="card-body text-center">Đánh Giá</div>
+                    <div class="card-body text-center ">@modelDanhGia.Count()</div>
+                    <div class="card-footer d-flex align-items-center justify-content-between">
+                        <a class="small text-white stretched-link" href="#">View Details</a>
+                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-header">
+                <i class="fas fa-table me-1"></i>
+                List Tour
+                @*<div class="float-right" style="float: right">
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                        THÊM MỚI
+                    </button>
+                </div>*@
+            </div>
+            <div class="card-body">
+                <table id="datatablesSimple">
+                    <thead>
+                        <tr>
+                            <th>Mã phiếu</th>
+                            <th>Mã người liên hệ</th>
+                            <th>Mã tour</th>
+                            <th>Địa điểm đón</th>
+                            <th>Tổng giá</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @{
+                            foreach (var item in modelPhieuTour)
+                            {
+                                <tr>
+                                    <td>@item.MaPhieuDat</td>
+                                    <td>@item.MaNguoiLienHe</td>
+                                    <td>@item.MaTour</td>
+                                    <td>@item.DiaDiemDon</td>
+                                    <td>@item.TongGia</td>
+                                    <td>
+                                        <button type="button" class="btn btn-primary" onclick="window.location.href = '/Admin/BillTour/EditBillTour?id=@item.MaPhieuDat'">Edit</button>
+                                        <button id="delete-btn" type="button" class="btn btn-danger" onclick="clickDelete_Phieu(@item.MaPhieuDat)">Delete</button>
+                                    </td>
+                                </tr>
+                            }
+
+                        }
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Thêm Mới</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form class="needs-validation" novalidate method="post" action="~/Admin/Home/ThemmoiTour">
+                            <div class="form-group">
+                                <label for="recipient-name" class="col-form-label">Mã Tour:</label>
+                                <input type="text" class="form-control" id="Tour_ma" name="MaTour" required>
+                                <div class="valid-feedback">
+                                    Looks good!
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="recipient-name" class="col-form-label">Tên Tour:</label>
+                                <input type="text" class="form-control" id="Tour-name" name="TenTour" required>
+                                <div class="valid-feedback">
+                                    Looks good!
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="recipient-name" class="col-form-label">Giá Tiền:</label>
+                                <input type="text" class="form-control" id="Tour-money" name="Gia" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="message-text" class="col-form-label">Mô Tả:</label>
+                                <textarea class="form-control" id="message-text" name="Mota" required></textarea>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label for="inputEmail4">Mã Địa Danh</label>
+                                    <select class="custom-select mr-sm-2" id="inlineFormCustomSelect" name="MaDiaDanh" required>
+                                        <option selected>Choose...</option>
+                                        @foreach (var item in modelTours)
+                                        {
+                                            <option value="@item.MaDiaDanh">@item.MaDiaDanh</option>
+                                        }
+
+                                    </select>
+
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="inputPassword4">Mã Chi Tiết Tour</label>
+                                    <select class="custom-select mr-sm-2" id="SelectMaChiTiet" name="MaChiTietTour" required>
+                                        <option selected>Choose...</option>
+                                        @foreach (var item in modelTours)
+                                        {
+                                            <option value="@item.MaChiTietTour">@item.MaChiTietTour</option>
+                                        }
+
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label for="inputEmail4">Địa Điểm</label>
+                                    <input type="text" class="form-control" id="inputEmail4" name="DiaDiem" required>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="inputPassword4">Link Image</label>
+                                    <input type="text" class="form-control" id="inputPassword4" name="LinkImage" required>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col-md-4">
+                                    <label for="inputCity">Number View</label>
+                                    <input type="text" class="form-control" id="inputCity" name="NumView" required>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label for="inputCity">Number Day</label>
+                                    <input type="text" class="form-control" id="inputCity" name="NumDay" required>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label for="inputCity">NumStart</label>
+                                    <input type="text" class="form-control" id="inputCity" name="NumStar" required>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary">Send message</button>
+                            </div>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</main>
+
+<script>
+
+    function clickDelete_Phieu(id) {
+        swal({
+            title: "Are you sure?",
+            text: "Once deleted, you will not be able to recover this imaginary file!",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        })
+            .then((willDelete) => {
+                if (willDelete) {
+                    swal("Poof! Your imaginary file has been deleted!", {
+                        icon: "success",
+                    });
+                    window.location.href = '/Admin/BillTour/DeleteBillTour?id=' + id;
+
+
+                } else {
+                    swal("Your imaginary file is safe!");
+                }
+            });
+    }
+</script>

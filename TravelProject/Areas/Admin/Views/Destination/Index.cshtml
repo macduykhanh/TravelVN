@@ -1,0 +1,180 @@
+﻿@using TravelProject.Models;
+@model List<Blog>
+@{
+     TravelContext mdt = new TravelContext();
+     var modelUser = mdt.ThanhViens.ToList();
+     var modelTours = mdt.Tours.ToList();
+     var modelPhieuTour = mdt.PhieuDatTours.ToList();
+     var modelDanhGia = mdt.DanhGias.ToList();
+     var modelDes = mdt.DiaDanhs.ToList();
+     var modelVung = mdt.Vungs.ToList();
+}
+@{
+     ViewBag.Title = "Index";
+     Layout = "~/Areas/Admin/Views/Shared/Layout_Admin.cshtml";
+}
+<main>
+     <div class="container-fluid px-4">
+          <h1 class="mt-4">Quản Lý Địa Danh</h1>
+          <ol class="breadcrumb mb-4">
+          </ol>
+          <div class="row">
+               <div class="col-xl-3 col-md-6">
+                    <div class="card bg-primary text-white mb-4">
+                         <div class="card-body text-center">User Đăng Ký</div>
+                         <div class="card-body text-center ">@modelUser.Count()</div>
+                         <div class="card-footer d-flex align-items-center justify-content-between">
+                              <a class="small text-white stretched-link" href="#">View Details</a>
+                              <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                         </div>
+                    </div>
+               </div>
+               <div class="col-xl-3 col-md-6">
+                    <div class="card bg-warning text-white mb-4">
+                         <div class="card-body text-center">Tour Du Lịch </div>
+                         <div class="card-body text-center ">@modelTours.Count()</div>
+                         <div class="card-footer d-flex align-items-center justify-content-between">
+                              <a class="small text-white stretched-link" href="#">View Details</a>
+                              <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                         </div>
+                    </div>
+               </div>
+               <div class="col-xl-3 col-md-6">
+                    <div class="card bg-success text-white mb-4">
+                         <div class="card-body text-center">Tour Đã Đặt</div>
+                         <div class="card-body text-center ">@modelPhieuTour.Count()</div>
+                         <div class="card-footer d-flex align-items-center justify-content-between">
+                              <a class="small text-white stretched-link" href="#">View Details</a>
+                              <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                         </div>
+                    </div>
+               </div>
+               <div class="col-xl-3 col-md-6">
+                    <div class="card bg-danger text-white mb-4">
+                         <div class="card-body text-center">Đánh Giá</div>
+                         <div class="card-body text-center ">@modelDanhGia.Count()</div>
+                         <div class="card-footer d-flex align-items-center justify-content-between">
+                              <a class="small text-white stretched-link" href="#">View Details</a>
+                              <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                         </div>
+                    </div>
+               </div>
+          </div>
+
+          <div class="card mb-4">
+               <div class="card-header">
+                    <i class="fas fa-table me-1"></i>
+                    List Destination
+                    <div class="float-right" style="float: right">
+                         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                              THÊM MỚI
+                         </button>
+                    </div>
+               </div>
+               <div class="card-body">
+                    <table id="datatablesSimple">
+                         <thead>
+                              <tr>
+                                   <th>Tên Địa Danh</th>
+                                   <th class="col-lg-8">Mô Tả</th>
+                                   @*<th>Image</th>
+                                   <th>Mã Vùng</th>*@
+                                   <th>Chức Năng</th>
+                              </tr>
+                         </thead>
+
+                         <tbody>
+                              @{
+                                   foreach (var item in modelDes)
+                                   {
+                                        <tr>
+                                             <td>@item.TenDiaDanh</td>
+                                             <td colspan="1" class="col-lg-8">@item.MoTa</td>
+                                             @*<td><img src="@Url.Content("~/Content/images/Destination2/")@item.Img" style="width: 50px; "></td>
+                                             <td>@item.MaVung</td>*@
+                                        <td>
+                                            <button style="margin-left:45px;margin-top:30px;" type="button" class="btn btn-primary" onclick="window.location.href='/Admin/Destination/EditDes?id=@item.MaDiaDanh'">Edit</button>
+                                            @*<button style="margin-left:75px;margin-top:30px;" type="button" class="btn btn-primary" onclick="window.location.href='/Admin/Destination/DeleteDes?id=@item.MaDiaDanh'">Del</button>*@
+                                        </td>
+                                        </tr>
+                                   }
+
+                              }
+
+                         </tbody>
+                    </table>
+               </div>
+          </div>
+
+          <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+               <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                         <div class="modal-header">
+                              <h5 class="modal-title" id="exampleModalLabel">Thêm Mới</h5>
+                              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                   <span aria-hidden="true">&times;</span>
+                              </button>
+                         </div>
+                         <div class="modal-body">
+                              <form class="needs-validation" novalidate method="post" action="~/Admin/Destination/ThemmoiDes">
+                                   <div class="form-group">
+                                        <label for="recipient-name" class="col-form-label">Mã Địa Danh:</label>
+                                        <input type="text" class="form-control" id="Tour_ma" name="MaDiaDanh" required>
+                                        <div class="valid-feedback">
+                                             Looks good!
+                                        </div>
+                                   </div>
+
+                                   <div class="form-group">
+                                        <label for="recipient-name" class="col-form-label">Tên Địa Danh:</label>
+                                        <input type="text" class="form-control" id="Tour-name" name="TenDiaDanh" required>
+                                        <div class="valid-feedback">
+                                             Looks good!
+                                        </div>
+                                   </div>
+                                   
+                                   <div class="form-group">
+                                        <label for="message-text" class="col-form-label">Mô Tả:</label>
+                                        <textarea class="form-control" id="message-text" name="Mota" required></textarea>
+                                   </div>
+                                   <div class="form-row">
+                                        <div class="form-group col-md-6">
+                                             <label for="inputEmail4">Mã Vùng</label>
+                                             <select class="custom-select mr-sm-2" id="inlineFormCustomSelect" name="MaVung" required>
+                                                  <option selected>Choose...</option>
+                                                  @foreach (var item in modelVung)
+                                                  {
+                                                       <option value="@item.MaVung">@item.MaVung</option>
+                                                  }
+
+                                             </select>
+
+                                        </div>
+                                        
+                                   </div>
+                                   <div class="form-row">
+                                        <div class="form-group col-md-6">
+                                             <label for="inputEmail4">Link Img 1</label>
+                                             <input type="text" class="form-control" id="inputEmail4" name="Img" required>
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                             <label for="inputPassword4">Link Img2</label>
+                                             <input type="text" class="form-control" id="inputPassword4" name="Img2" required>
+                                        </div>
+                                   </div>
+                                   
+                                   <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                        <button type="submit" class="btn btn-primary">Send message</button>
+                                   </div>
+                              </form>
+                         </div>
+
+                    </div>
+               </div>
+          </div>
+
+
+     </div>
+</main>
+

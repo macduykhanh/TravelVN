@@ -1,0 +1,101 @@
+﻿@using TravelProject.Models;
+@model List<Blog>
+@{
+    TravelContext mdt = new TravelContext();
+    var modelUser = mdt.ThanhViens.ToList();
+    var modelTour = mdt.Tours.ToList();
+    var modelPhieuTour = mdt.PhieuDatTours.ToList();
+    var modelDanhGia = mdt.DanhGias.ToList();
+}
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/Layout_Admin.cshtml";
+}
+<main>
+    <div class="container-fluid px-4">
+        <h1 class="mt-4">Quản Lý User</h1>
+        <ol class="breadcrumb mb-4">
+        </ol>
+        <div class="row">
+            <div class="col-xl-3 col-md-6">
+                <div class="card bg-primary text-white mb-4">
+                    <div class="card-body text-center">User Đăng Ký</div>
+                    <div class="card-body text-center ">@modelUser.Count()</div>
+                    <div class="card-footer d-flex align-items-center justify-content-between">
+                        <a class="small text-white stretched-link" href="#">View Details</a>
+                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6">
+                <div class="card bg-warning text-white mb-4">
+                    <div class="card-body text-center">Tour Du Lịch </div>
+                    <div class="card-body text-center ">@modelTour.Count()</div>
+                    <div class="card-footer d-flex align-items-center justify-content-between">
+                        <a class="small text-white stretched-link" href="#">View Details</a>
+                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6">
+                <div class="card bg-success text-white mb-4">
+                    <div class="card-body text-center">Tour Đã Đặt</div>
+                    <div class="card-body text-center ">@modelPhieuTour.Count()</div>
+                    <div class="card-footer d-flex align-items-center justify-content-between">
+                        <a class="small text-white stretched-link" href="#">View Details</a>
+                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6">
+                <div class="card bg-danger text-white mb-4">
+                    <div class="card-body text-center">Đánh Giá</div>
+                    <div class="card-body text-center ">@modelDanhGia.Count()</div>
+                    <div class="card-footer d-flex align-items-center justify-content-between">
+                        <a class="small text-white stretched-link" href="#">View Details</a>
+                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-header">
+                <i class="fas fa-table me-1"></i>
+                List User
+            </div>
+            <div class="card-body">
+                <table id="datatablesSimple">
+                    <thead>
+                        <tr>
+                            <th>Email</th>
+                            <th>User name</th>
+                            <th>Password</th>
+                            <th>Chức Năng </th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @{
+                            foreach (var item in modelUser)
+                            {
+                                <tr>
+                                    <td>@item.email</td>
+                                    <td>@item.username</td>
+                                    <td>@item.pass</td>
+                                    <td>
+                                        <button id="delete-btn" type="button" class="btn btn-danger" onclick="clickDelete(@item.MaThanhVien, name='User')">Delete</button>
+                                    </td>
+                                </tr>
+                            }
+
+                        }
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+</main>
+
